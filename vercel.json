@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/install",
+      "destination": "/api/install.js"
+    }
+  ]
+}
