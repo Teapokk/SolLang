@@ -102,7 +102,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const libraryPath = `libs/${safeName}`;
+    const libraryPath = `${safeName}`;
     const contents = await loadLibraryContents(libraryPath);
 
     if (!contents) {
