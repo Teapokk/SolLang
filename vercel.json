@@ -4,5 +4,9 @@
       "source": "/api/install",
       "destination": "/api/install.js"
     }
+    {
+      "source": "/lib",
+      "destination": "/api/lib.js"
+    }
   ]
 }
