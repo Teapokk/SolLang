@@ -67,8 +67,8 @@ echo "Detected: $SYS -> bin: $BIN_DIR | lib: $LIB_DIR"
 
 sleep 0.25
 echo "Cleaning previous Sol installation..."
-rm -rf "$LIB_DIR"
-mkdir -p "$BIN_DIR" "$LIB_DIR" "$LIB_DIR/sol" "$LIB_DIR/sps"
+rm -rf "$LIB_DIR" "$HOME/.local/lib/sps"
+mkdir -p "$BIN_DIR" "$LIB_DIR" "$LIB_DIR/sol" "$LIB_DIR/sps" "$HOME/.local/lib/sps"
 
 SOL_BIN="$(find "$T/sol_src" -type f -name "sol" | head -n 1)"
 SOL_SO="$(find "$T/sol_src" -type f -name "sol.so" | head -n 1)"
@@ -83,8 +83,15 @@ if [ -n "$SOL_SO" ]; then
   cp -f "$SOL_SO" "$LIB_DIR/sol/sol.so"
 fi
 
+SPS_SO="$(find "$T/sps_src" -type f -name "sps.so" | head -n 1)"
 SPS_ENTRY="$(find "$T/sps_src" -type f \\( -name "sps.js" -o -name "index.js" -o -name "sps" \\) | head -n 1)"
 cp -rf "$T/sps_src/." "$LIB_DIR/sps/"
+
+SPS_SO_TARGET=""
+if [ -n "$SPS_SO" ]; then
+  cp -f "$SPS_SO" "$HOME/.local/lib/sps/sps.so"
+  SPS_SO_TARGET="$HOME/.local/lib/sps/sps.so"
+fi
 
 if [ -n "$SPS_ENTRY" ]; then
   REL_ENTRY="\${SPS_ENTRY#$T/sps_src/}"
@@ -93,12 +100,17 @@ if [ -n "$SPS_ENTRY" ]; then
   if head -n 1 "$TARGET_ENTRY" 2>/dev/null | grep -q "node"; then
     cat << EOF_WRAP > "$BIN_DIR/sps"
 #!/usr/bin/env bash
+export SPS_LIB_PATH="${SPS_SO_TARGET}"
 exec node "$TARGET_ENTRY" "\$@"
 EOF_WRAP
-    chmod +x "$BIN_DIR/sps"
   else
-    ln -sf "$TARGET_ENTRY" "$BIN_DIR/sps"
+    cat << EOF_WRAP > "$BIN_DIR/sps"
+#!/usr/bin/env bash
+export SPS_LIB_PATH="${SPS_SO_TARGET}"
+exec "$TARGET_ENTRY" "\$@"
+EOF_WRAP
   fi
+  chmod +x "$BIN_DIR/sps"
 fi
 
 sleep 0.2
