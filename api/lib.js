@@ -72,6 +72,7 @@ export default async function handler(req, res) {
 
     const arrayBuf = await assetRes.arrayBuffer();
     const buffer = Buffer.from(arrayBuf);
+    const content = buffer.toString("utf8");
     const contentBase64 = buffer.toString("base64");
 
     const urlPath = new URL(targetUrl).pathname;
@@ -87,6 +88,7 @@ export default async function handler(req, res) {
           path: `${libFolder}/${fileName}`,
           type: "file",
           size: buffer.length,
+          content,
           contentBase64,
         },
       ],
