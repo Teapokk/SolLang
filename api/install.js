@@ -1,6 +1,8 @@
 export default function handler(req, res) {
   if (req.method !== "GET" && req.method !== "HEAD") {
-    res.status(405).send("Method Not Allowed");
+    res.statusCode = 405;
+    res.setHeader("Content-Type", "text/plain; charset=utf-8");
+    res.end("Method Not Allowed");
     return;
   }
 
@@ -100,13 +102,13 @@ if [ -n "$SPS_ENTRY" ]; then
   if head -n 1 "$TARGET_ENTRY" 2>/dev/null | grep -q "node"; then
     cat << EOF_WRAP > "$BIN_DIR/sps"
 #!/usr/bin/env bash
-export SPS_LIB_PATH="${SPS_SO_TARGET}"
+export SPS_LIB_PATH="\${SPS_SO_TARGET}"
 exec node "$TARGET_ENTRY" "\$@"
 EOF_WRAP
   else
     cat << EOF_WRAP > "$BIN_DIR/sps"
 #!/usr/bin/env bash
-export SPS_LIB_PATH="${SPS_SO_TARGET}"
+export SPS_LIB_PATH="\${SPS_SO_TARGET}"
 exec "$TARGET_ENTRY" "\$@"
 EOF_WRAP
   fi
@@ -118,7 +120,8 @@ rm -rf "$T"
 echo "Sol installed successfully."
 `;
 
+  res.statusCode = 200;
   res.setHeader("Content-Type", "text/plain; charset=utf-8");
   res.setHeader("Cache-Control", "no-store");
-  res.status(200).send(installScript);
+  res.end(installScript);
 }
