@@ -4,7 +4,7 @@ export default function handler(req, res) {
     return;
   }
 
-  const SOL_TAR_URL = "https://github.com/Teapokk/SolLang/releases/download/Sol/Sol_V1.0.0-Lang_Free.tar";
+  const SOL_TAR_URL = "https://github.com/Teapokk/SolLang/releases/download/sol2/Sol_V1.1.0-Lang_Free.tar";
   const SPS_TAR_URL = "https://github.com/Teapokk/SolLang/releases/download/SPS/SPS_V1.0.0.tar";
 
   const installScript = `#!/usr/bin/env bash
