@@ -29,7 +29,7 @@ case "$ANSWER" in
 esac
 
 sleep 0.25
-printf "\nCatching (Sun version)\n\n"
+printf "\\nCatching (Sun version)\\n\\n"
 T="$(mktemp -d "\${TMPDIR:-\$HOME}/.sol_dl_XXXXXX")"
 mkdir -p "$T/sol_src" "$T/sps_src"
 
@@ -37,12 +37,12 @@ curl -fsSL "$SOL_TAR_URL" -o "$T/sol.tar"
 curl -fsSL "$SPS_TAR_URL" -o "$T/sps.tar"
 
 sleep 0.3
-printf "opening .tar\n\n"
+printf "opening .tar\\n\\n"
 tar -xf "$T/sol.tar" -C "$T/sol_src"
 tar -xf "$T/sps.tar" -C "$T/sps_src"
 
 sleep 0.25
-printf "(trying to guess your terminal)\n\n"
+printf "(trying to guess your terminal)\\n\\n"
 OS_NAME="$(uname -s 2>/dev/null || echo Unknown)"
 
 if [ -n "\${TERMUX_VERSION:-}" ] || [ -d "/data/data/com.termux/files/usr" ]; then
@@ -83,7 +83,7 @@ if [ -n "$SOL_SO" ]; then
   cp -f "$SOL_SO" "$LIB_DIR/sol/sol.so"
 fi
 
-SPS_ENTRY="$(find "$T/sps_src" -type f \( -name "sps.js" -o -name "index.js" -o -name "sps" \) | head -n 1)"
+SPS_ENTRY="$(find "$T/sps_src" -type f \\( -name "sps.js" -o -name "index.js" -o -name "sps" \\) | head -n 1)"
 cp -rf "$T/sps_src/." "$LIB_DIR/sps/"
 
 if [ -n "$SPS_ENTRY" ]; then
