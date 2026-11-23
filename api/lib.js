@@ -71,28 +71,10 @@ export default async function handler(req, res) {
     }
 
     const arrayBuf = await assetRes.arrayBuffer();
-    const buffer = Buffer.from(arrayBuf);
-    const content = buffer.toString("utf8");
-    const contentBase64 = buffer.toString("base64");
+    const content = Buffer.from(arrayBuf).toString("utf8");
 
-    const urlPath = new URL(targetUrl).pathname;
-    const rawFileName = urlPath.split("/").pop() || `${safeName}.sl`;
-    const fileName = decodeURIComponent(rawFileName);
-    const libFolder = safeName.endsWith(".sol") ? safeName : `${safeName}.sol`;
-
-    return res.status(200).json({
-      library: safeName,
-      entries: [
-        {
-          name: fileName,
-          path: `${libFolder}/${fileName}`,
-          type: "file",
-          size: buffer.length,
-          content,
-          contentBase64,
-        },
-      ],
-    });
+    res.setHeader("Content-Type", "text/plain; charset=utf-8");
+    return res.status(200).send(content);
   } catch (err) {
     return res.status(500).json({
       error: "Registry error while resolving library.",
